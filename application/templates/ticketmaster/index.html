@@ -1,0 +1,87 @@
+{% extends "Base.html" %}
+{% load static %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"/>
+{% endblock %}
+
+{% block title %} TicketMaster Application {% endblock %}
+
+{% block heading %}
+    <div class="row justify-content-center"><div class="col text-center fs-1">TicketMaster</div></div>
+    <div class="row justify-content-center"><div class="col text-center fs-4 fw-bold">Quickly Find Tickets Around You!</div></div>
+
+    <form method="GET" class="row justify-content-center">
+        <div class="col text-center">
+            {{ form.genre}}
+            <datalist id="datalistOptions">
+                <option value="Music">
+                <option value="Sports">
+                <option value="Theater">
+                <option value="Family">
+                <option value="Arts & Music">
+                <option value="Concerts">
+                <option value="Dance">
+            </datalist>
+        </div>
+        <div class="col-3">{{ form.city }}</div>
+        <div class="col-auto"><button class="btn btn-primary" type="submit" id="button-addon2">Search</button></div>
+    </form>
+{% endblock %}
+
+{% block content %}
+    {% if events %}
+        <h4 class="text-secondary text-muted event-padding">{{ events|length }} events found</h4>
+
+        {% for event in events %}
+            <div class="card-rounded p-3 md-3 shadow-lg bg-white">
+                <div class="row align-items-center">
+                    <div class="col-md-4"><img src="{{ event.image }}" class="img-fluid rounded" alt="{{ event.name }}"></div>
+
+                    <div class="col-md-5">
+                        <h5 class="card-title fw-bold mb-3 font-size">{{ event.name }}</h5>
+                        <p class="card-text text-muted text-secondary">
+                            <span class="font-size"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"></path></path> </svg>
+                                {{ event.venue }}</span>{{ event.address }}<br> {{ event.city }}, {{ event.state }}</p>
+                    </div>
+
+                    <div class="col-md-3 text-end">
+                        <div class="fw-bold text-primary-emphasis">{{ event.date }}</div>
+                        <div class="fw-bold text-primary-emphasis">{{ event.time }}</div>
+
+                        <a href="{{ event.event_url }}" target="_blank">
+                            <button type="button" class="btn btn-outline-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-ticket-detailed" viewBox="0 0 16 16">
+                                      <path d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M5 7a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2z"/>
+                                      <path d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6zM1.5 4a.5.5 0 0 0-.5.5v1.05a2.5 2.5 0 0 1 0 4.9v1.05a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-1.05a2.5 2.5 0 0 1 0-4.9V4.5a.5.5 0 0 0-.5-.5z"/>
+                                </svg>
+                                Find Tickets
+                            </button>
+                        </a>
+
+                         <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="event_id" value="{{ event.event_id }}">
+                            <input type="hidden" name="name" value="{{ event.name }}">
+                            <input type="hidden" name="venue" value="{{ event.venue }}">
+                            <input type="hidden" name="address" value="{{ event.address }}">
+                            <input type="hidden" name="city" value="{{ event.city }}">
+                            <input type="hidden" name="state" value="{{ event.state }}">
+                            <input type="hidden" name="date" value="{{ event.date }}">
+                            <input type="hidden" name="time" value="{{ event.time }}">
+                            <input type="hidden" name="image" value="{{ event.image }}">
+                            <input type="hidden" name="event_url" value="{{ event.event_url }}">
+
+                            <button class="btn btn-sm btn-success mt-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy-fill" viewBox="0 0 16 16">
+                                    <path d="M0 1.5A1.5 1.5 0 0 1 1.5 0H3v5.5A1.5 1.5 0 0 0 4.5 7h7A1.5 1.5 0 0 0 13 5.5V0h.086a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5H14v-5.5A1.5 1.5 0 0 0 12.5 9h-9A1.5 1.5 0 0 0 2 10.5V16h-.5A1.5 1.5 0 0 1 0 14.5z"/>
+                                    <path d="M3 16h10v-5.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5zm9-16H4v5.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5zM9 1h2v4H9z"/>
+                                </svg>Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,40 @@
+* {
+    font-family:sans-serif;
+}
+
+body {
+     background:#fafafa;
+}
+
+header {
+    padding: 50px;
+}
+
+.button-padding {
+    padding: 30px;
+}
+
+.font-size {
+    font-size: 25px;
+}
+
+.container-class {
+    background: white;
+}
+
+.result-padding{
+    margin-top:20px;
+}
+
+.error-text{
+    text-align: center;
+    font-size: 20px;
+}
+
+.not-found-padding {
+    padding: 20px;
+}
+
+.event-padding {
+    padding-top: 20px;
+}
